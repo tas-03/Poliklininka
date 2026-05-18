@@ -1,0 +1,12 @@
+﻿<Window x:Class="Poliklininka.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Poliklininka"
+        mc:Ignorable="d"
+        Title="AdminWindow" Height="450" Width="800">
+    <Grid>
+        <Button Content="Добавить пользователя" HorizontalAlignment="Left" Height="32" Margin="51,53,0,0" VerticalAlignment="Top" Width="242" Click="Button_Click"/>
+    </Grid>
+</Window>
