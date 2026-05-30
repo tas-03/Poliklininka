@@ -9,5 +9,5 @@ public class User
     public string Role { get; set; } = string.Empty;
     public string Discriminator { get; set; } = string.Empty;
     public byte[]? Photo { get; set; }
-
+   
 }

@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Npgsql" Version="8.0.9" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
@@ -30,6 +31,14 @@
     <None Update="Assets\No_Ava.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Admin_Model\" />
+    <Folder Include="Views\Admin_View\Controls\" />
+    <Folder Include="Views\Doctor_View\Controls\" />
+    <Folder Include="Views\Doctor_View\Dialogs\" />
+    <Folder Include="Views\Patient_View\Controls\" />
   </ItemGroup>
 
 </Project>
