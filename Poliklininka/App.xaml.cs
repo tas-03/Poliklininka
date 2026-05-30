@@ -34,6 +34,12 @@ public partial class App : Application
 
         _serviceProvider = services.BuildServiceProvider();
 
+        using (var scope = _serviceProvider.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Database.Migrate();
+        }
+
         var loginWindow = _serviceProvider.GetRequiredService<Login_Window>();
 
         loginWindow.Show();
