@@ -117,16 +117,7 @@ services.AddScoped<IPatientService, EFPatientService>();
 ## Запуск проекта
 
 1. Клонировать репозиторий
-2. Настроить строку подключения в `appsettings.json`:
-```json
-{
-  "ConnectionStrings": {
-    "Default": "Host=localhost;Database=poliklininka;Username=postgres;Password=ваш_пароль"
-  }
-}
-```
-3. Применить миграции:
-```bash
-dotnet ef database update
-```
-4. Запустить проект через Visual Studio
+2. Убедиться что PostgreSQL установлен и запущен
+3. Запустить проект через Visual Studio — база данных и таблицы создадутся автоматически
+
+> **Примечание:** Настройки подключения к БД находятся в `appsettings.json`.
