@@ -4,6 +4,54 @@
              xmlns:local="clr-namespace:Poliklininka"
              >
     <Application.Resources>
-         
+
+        <!-- Заголовки -->
+        <Style x:Key="TitleText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="/Poliklininka;component/Fonts/#Strogo"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="#2C2C2A"/>
+        </Style>
+
+        <!-- Подзаголовки (Полное имя, Телефон и тд) -->
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="/Poliklininka;component/Fonts/#Strogo"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#888780"/>
+        </Style>
+
+        <!-- Текст из БД -->
+        <Style x:Key="ValueText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="/Poliklininka;component/Fonts/#ProggyVector"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#2C2C2A"/>
+        </Style>
+        
+        <Style x:Key="ValueTextbox" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="/Poliklininka;component/Fonts/#ProggyVector"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#2C2C2A"/>
+        </Style>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="FontFamily" Value="/Poliklininka;component/Fonts/#ProggyVector"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#2C2C2A"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="/Poliklininka;component/Fonts/#ProggyVector"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#2C2C2A"/>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="FontFamily" Value="/Poliklininka;component/Fonts/#ProggyVector"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#2C2C2A"/>
+        </Style>
+
+
+ 
+
+
     </Application.Resources>
 </Application>

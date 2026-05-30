@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Poliklininka.Infrastructure.EF;
@@ -11,9 +12,11 @@ using Poliklininka.Infrastructure.EF;
 namespace Poliklininka.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260530171534_12")]
+    partial class _12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,9 +59,14 @@ namespace Poliklininka.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("allergy_id");
 
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("integer");
+
                     b.HasKey("MedCardId", "AllergyId");
 
                     b.HasIndex("AllergyId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("allergy_patient", (string)null);
                 });
@@ -192,30 +200,6 @@ namespace Poliklininka.Migrations
                     b.ToTable("blood_groups", (string)null);
                 });
 
-            modelBuilder.Entity("Poliklininka.Entities.ChronicDiseases", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("сronic_diseases", (string)null);
-                });
-
             modelBuilder.Entity("Poliklininka.Entities.MedCard", b =>
                 {
                     b.Property<int>("Id")
@@ -228,6 +212,10 @@ namespace Poliklininka.Migrations
                     b.Property<int>("BloodGroupId")
                         .HasColumnType("integer")
                         .HasColumnName("blood_group_id");
+
+                    b.Property<string>("ChronicDiseases")
+                        .HasColumnType("text")
+                        .HasColumnName("chronic_diseases");
 
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date")
@@ -499,23 +487,6 @@ namespace Poliklininka.Migrations
                     b.ToTable("visit_histories", (string)null);
                 });
 
-            modelBuilder.Entity("Poliklininka.Entities.СronicDiseasesPatient", b =>
-                {
-                    b.Property<int>("MedCardId")
-                        .HasColumnType("integer")
-                        .HasColumnName("medcard_id");
-
-                    b.Property<int>("ChronicDiseasesId")
-                        .HasColumnType("integer")
-                        .HasColumnName("chronic_diseases_id");
-
-                    b.HasKey("MedCardId", "ChronicDiseasesId");
-
-                    b.HasIndex("ChronicDiseasesId");
-
-                    b.ToTable("сronic_diseases_patient", (string)null);
-                });
-
             modelBuilder.Entity("Poliklininka.Entities.Doctor", b =>
                 {
                     b.HasBaseType("Poliklininka.Entities.User");
@@ -568,6 +539,10 @@ namespace Poliklininka.Migrations
                         .HasForeignKey("MedCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Poliklininka.Entities.Patient", null)
+                        .WithMany("AllergyPatients")
+                        .HasForeignKey("PatientId");
 
                     b.Navigation("Allergy");
 
@@ -696,25 +671,6 @@ namespace Poliklininka.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Poliklininka.Entities.СronicDiseasesPatient", b =>
-                {
-                    b.HasOne("Poliklininka.Entities.ChronicDiseases", "ChronicDiseases")
-                        .WithMany("HronicDiseasesPatient")
-                        .HasForeignKey("ChronicDiseasesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Poliklininka.Entities.MedCard", "MedCard")
-                        .WithMany("HronicDiseasesPatient")
-                        .HasForeignKey("MedCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ChronicDiseases");
-
-                    b.Navigation("MedCard");
-                });
-
             modelBuilder.Entity("Poliklininka.Entities.Doctor", b =>
                 {
                     b.HasOne("Poliklininka.Entities.User", null)
@@ -753,16 +709,9 @@ namespace Poliklininka.Migrations
                     b.Navigation("MedCards");
                 });
 
-            modelBuilder.Entity("Poliklininka.Entities.ChronicDiseases", b =>
-                {
-                    b.Navigation("HronicDiseasesPatient");
-                });
-
             modelBuilder.Entity("Poliklininka.Entities.MedCard", b =>
                 {
                     b.Navigation("AllergyPatient");
-
-                    b.Navigation("HronicDiseasesPatient");
                 });
 
             modelBuilder.Entity("Poliklininka.Entities.MedService", b =>
@@ -796,6 +745,8 @@ namespace Poliklininka.Migrations
 
             modelBuilder.Entity("Poliklininka.Entities.Patient", b =>
                 {
+                    b.Navigation("AllergyPatients");
+
                     b.Navigation("Appointments");
 
                     b.Navigation("MedCard");

@@ -23,12 +23,57 @@ public class ApplicationDbContext : DbContext
     public DbSet<Recipe> Recipes { get; set; } = null!;
     public DbSet<RecipeHistory> RecipeHistories { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<AllergyPatient> AllergyPatients { get; set; } = null!;
+    public DbSet<Allergy> Allergies { get; set; } = null!;
+    public DbSet<ChronicDiseases> ChronicDiseases { get; set; } = null!;
+    public DbSet<ÑronicDiseasesPatient> ÑronicDiseasesPatient {  get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<ChronicDiseases>(e =>
+        {
+            e.ToTable("ñronic_diseases");
+            e.HasKey(e =>e.Id);
+            e.Property(e => e.Id).HasColumnName("id").IsRequired();
+            e.Property(e => e.Name).HasColumnName("name").IsRequired();
+            e.Property(e => e.Code).HasColumnName("code").IsRequired();
+        });
+
+        modelBuilder.Entity<ÑronicDiseasesPatient>(e =>
+        {
+            e.ToTable("ñronic_diseases_patient");
+            e.HasKey(e => new { e.MedCardId, e.ChronicDiseasesId });
+            e.Property(e => e.MedCardId).HasColumnName("medcard_id").IsRequired();
+            e.Property(e => e.ChronicDiseasesId).HasColumnName("chronic_diseases_id").IsRequired();
+            e.HasOne(e => e.MedCard).WithMany(e => e.HronicDiseasesPatient).HasForeignKey(e => e.MedCardId).OnDelete(DeleteBehavior.Cascade); ;
+            e.HasOne(e => e.ChronicDiseases).WithMany(a => a.HronicDiseasesPatient).HasForeignKey(e => e.ChronicDiseasesId);
+        });
+
+        modelBuilder.Entity<AllergyPatient>(e =>
+        {
+            e.ToTable("allergy_patient");
+            e.HasKey(e => new { e.MedCardId, e.AllergyId });
+            e.Property(e => e.MedCardId).HasColumnName("medcard_id").IsRequired();
+            e.Property(e => e.AllergyId).HasColumnName("allergy_id").IsRequired();
+            e.HasOne(e => e.MedCard).WithMany(e => e.AllergyPatient).HasForeignKey(e => e.MedCardId).OnDelete(DeleteBehavior.Cascade); ;
+            e.HasOne(e => e.Allergy).WithMany(a => a.AllergyPatient).HasForeignKey(e => e.AllergyId);
+        }
+
+            );
+        modelBuilder.Entity<Allergy>(e =>
+        {
+            e.ToTable("allergies");
+            e.HasKey(e => e.Id);
+            e.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            e.Property(e => e.Name).HasColumnName("name").IsRequired();
+            e.Property(e => e.Code).HasColumnName("code").IsRequired();
+
+        });
+
         modelBuilder.Entity<User>(e =>
         {
-            e.ToTable("Users");
+            e.ToTable("users");
             e.HasKey(e => e.Id);
             e.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
             e.Property(e => e.Login).HasColumnName("login").IsRequired();
@@ -41,16 +86,16 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Reception>(e =>
         {
-            e.ToTable("Receptions");
+            e.ToTable("receptions");
             e.HasKey(r => r.ReceptionId);
         });
 
         modelBuilder.Entity<Patient>(e =>
         {
             e.ToTable("patients");
-            e.Property(p => p.Phone_number).HasColumnName("Phone_number");
-            e.Property(p => p.Insurance_Policy).HasColumnName("Insurance_Policy").IsRequired();
-            e.Property(p => p.Address).HasColumnName("Address");
+            e.Property(p => p.Phone_number).HasColumnName("phone_number");
+            e.Property(p => p.Insurance_Policy).HasColumnName("insurance_policy").IsRequired();
+            e.Property(p => p.Address).HasColumnName("address");
         });
 
 
@@ -71,16 +116,16 @@ public class ApplicationDbContext : DbContext
             e.Property(m => m.Id).HasColumnName("id");
             e.Property(m => m.PatientId).HasColumnName("patient_id");
             e.Property(m => m.BloodGroupId).HasColumnName("blood_group_id");
-            e.Property(m => m.CardNumber).HasColumnName("card_number").IsRequired();
+          
             e.Property(m => m.OpenDate).HasColumnName("open_date");
-            e.Property(m => m.Allergies).HasColumnName("allergies");
-            e.Property(m => m.ChronicDiseases).HasColumnName("chronic_diseases");
+           
             e.Property(m => m.Disability).HasColumnName("disability");
             e.Property(m => m.DateOfBirth).HasColumnName("date_of_birth");
 
+
             e.HasOne(m => m.Patient)
              .WithOne(p => p.MedCard)
-             .HasForeignKey<MedCard>(m => m.PatientId);
+             .HasForeignKey<MedCard>(m => m.PatientId).OnDelete(DeleteBehavior.Cascade); ;
 
             e.HasOne(m => m.BloodGroup)
              .WithMany(b => b.MedCards)

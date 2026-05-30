@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Poliklininka.Infrastructure.EF;
@@ -11,9 +12,11 @@ using Poliklininka.Infrastructure.EF;
 namespace Poliklininka.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260530185004_19")]
+    partial class _19
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,9 +59,14 @@ namespace Poliklininka.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("allergy_id");
 
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("integer");
+
                     b.HasKey("MedCardId", "AllergyId");
 
                     b.HasIndex("AllergyId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("allergy_patient", (string)null);
                 });
@@ -569,6 +577,10 @@ namespace Poliklininka.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Poliklininka.Entities.Patient", null)
+                        .WithMany("AllergyPatients")
+                        .HasForeignKey("PatientId");
+
                     b.Navigation("Allergy");
 
                     b.Navigation("MedCard");
@@ -796,6 +808,8 @@ namespace Poliklininka.Migrations
 
             modelBuilder.Entity("Poliklininka.Entities.Patient", b =>
                 {
+                    b.Navigation("AllergyPatients");
+
                     b.Navigation("Appointments");
 
                     b.Navigation("MedCard");

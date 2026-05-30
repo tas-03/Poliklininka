@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\ProggyVector-Regular.ttf" />
+    <None Remove="Fonts\Strogo-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.26">
       <PrivateAssets>all</PrivateAssets>
@@ -39,6 +44,11 @@
     <Folder Include="Views\Doctor_View\Controls\" />
     <Folder Include="Views\Doctor_View\Dialogs\" />
     <Folder Include="Views\Patient_View\Controls\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\ProggyVector-Regular.ttf" />
+    <Resource Include="Fonts\Strogo-Regular.ttf" />
   </ItemGroup>
 
 </Project>

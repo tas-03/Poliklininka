@@ -11,6 +11,15 @@ public class EFPatientService : IPatientService
     {
         _context = context;
     }
+
+    public async Task<Patient> GetMedCardByUserIdAsync(int userId)
+    {
+        var patient = await _context.Patients.Include(p => p.MedCard).ThenInclude(e=>e.BloodGroup).Include(p => p.MedCard).ThenInclude(e => e.AllergyPatient).ThenInclude(e => e.Allergy).Include(p => p.MedCard).ThenInclude(e => e.HronicDiseasesPatient).ThenInclude(e => e.ChronicDiseases).FirstOrDefaultAsync(p=>p.Id == userId);
+        if (patient == null) 
+            throw new Exception("Ошибка загрузки медкарты!");
+        return patient;
+    }
+
     public async Task<Patient> GetPatientByUserIdAsync(int userId)
     {
         var patient =await _context.Patients.FirstOrDefaultAsync(e => e.Id == userId);

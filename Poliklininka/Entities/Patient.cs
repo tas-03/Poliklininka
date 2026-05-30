@@ -11,4 +11,5 @@ public class Patient : User
 
     public ICollection<Appointment> Appointments { get; set; } = [];
     public ICollection<VisitHistory> VisitHistories { get; set; } = [];
+    
 }

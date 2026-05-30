@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Poliklininka"
         mc:Ignorable="d"
-        Title="Login_Window" Height="250" Width="392">
-    <Grid>
-        <TextBox Name ="login"  HorizontalAlignment="Left" Height="22"  TextWrapping="Wrap" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="242" Margin="96,58,0,0"/>
-        <TextBox Name ="parol" HorizontalAlignment="Left" Height="22"  TextWrapping="Wrap" Text="{Binding Parol, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="242" Margin="96,90,0,0"/>
-        <Label Content="Авторизуйтесь!" HorizontalAlignment="Center" Height="32" Margin="0,10,0,0" VerticalAlignment="Top" Width="94"/>
-        <Label Content="Логин" HorizontalAlignment="Left" Height="32" Margin="46,56,0,0" VerticalAlignment="Top" Width="45"/>
-        <Label Content="Пароль" HorizontalAlignment="Left" Height="32" Margin="46,85,0,0" VerticalAlignment="Top" Width="55"/>
-        <Button Content="Войти" HorizontalAlignment="Left" Height="27" Margin="125,136,0,0" VerticalAlignment="Top" Width="156" Command="{Binding AuthCommand}"/>
+        Title="Login_Window" Height="231" Width="469">
+    <Grid Margin="10,0,10,7">
+        <TextBox Name ="login" Style="{StaticResource ValueTextbox}" HorizontalAlignment="Left" Height="22"  TextWrapping="Wrap" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="242" Margin="104,55,0,0"/>
+        <TextBox Name ="parol" Style="{StaticResource ValueTextbox}" HorizontalAlignment="Left" Height="22"  TextWrapping="Wrap" Text="{Binding Parol, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="242" Margin="104,89,0,0"/>
+        <TextBlock Text="Авторизуйтесь!" Style="{StaticResource TitleText}" HorizontalAlignment="Center" Height="32" Margin="0,10,0,0" VerticalAlignment="Top" Width="184"/>
+        <TextBlock Text="Логин" Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="32" Margin="43,64,0,0" VerticalAlignment="Top" Width="45"/>
+        <TextBlock Text="Пароль" Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="32" Margin="43,96,0,0" VerticalAlignment="Top" Width="55"/>
+        <Button Content="Войти" HorizontalAlignment="Center" Height="27" Margin="0,142,0,0" VerticalAlignment="Top" Width="156" Command="{Binding AuthCommand}"/>
 
     </Grid>
 </Window>
