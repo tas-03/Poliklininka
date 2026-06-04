@@ -8,11 +8,11 @@
         Title="Login_Window" Height="231" Width="469">
     <Grid Margin="10,0,10,7">
         <TextBox Name ="login" Style="{StaticResource ValueTextbox}" HorizontalAlignment="Left" Height="22"  TextWrapping="Wrap" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="242" Margin="104,55,0,0"/>
+        
         <TextBox Name ="parol" Style="{StaticResource ValueTextbox}" HorizontalAlignment="Left" Height="22"  TextWrapping="Wrap" Text="{Binding Parol, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="242" Margin="104,89,0,0"/>
         <TextBlock Text="Авторизуйтесь!" Style="{StaticResource TitleText}" HorizontalAlignment="Center" Height="32" Margin="0,10,0,0" VerticalAlignment="Top" Width="184"/>
         <TextBlock Text="Логин" Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="32" Margin="43,64,0,0" VerticalAlignment="Top" Width="45"/>
         <TextBlock Text="Пароль" Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="32" Margin="43,96,0,0" VerticalAlignment="Top" Width="55"/>
         <Button Content="Войти" HorizontalAlignment="Center" Height="27" Margin="0,142,0,0" VerticalAlignment="Top" Width="156" Command="{Binding AuthCommand}"/>
-
-    </Grid>
+          </Grid>
 </Window>

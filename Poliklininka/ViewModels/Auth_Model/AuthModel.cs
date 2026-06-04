@@ -53,11 +53,17 @@ public class AuthModel : BaseViewModel
         switch (user.Role)
         {
             case "Patient":
-                var viewModel = new PatientViewModel(user, _patientService);
-                var PatientWindow = new PatientWindow(viewModel);
+                var viewModelPatient = new PatientViewModel(user, _patientService);
+                var PatientWindow = new PatientWindow(viewModelPatient);
                 PatientWindow.Show();
                 OnLoginSuccess?.Invoke();
                 break;
+            //case "Admin":
+            //    var viewModelAdmin = new PatientViewModel(user, _patientService);
+            //    var PatientWindow = new PatientWindow(viewModelAdmin);
+            //    PatientWindow.Show();
+            //    OnLoginSuccess?.Invoke();
+            //    break;
         }
     }
 }
