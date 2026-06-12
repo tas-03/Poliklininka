@@ -1,16 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using Newtonsoft.Json.Linq;
-using Poliklininka.Core;
+﻿using Poliklininka.Core;
 using Poliklininka.Entities;
 using Poliklininka.Helpers;
-using Poliklininka.Infrastructure.EF;
 using Poliklininka.Services;
+using Poliklininka.Views.Patient_View.Dialogs;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Poliklininka.ViewModels.Patient_Model;
 
@@ -18,11 +14,11 @@ public class PatientViewModel : BaseViewModel
 {
 
     private readonly User _user;
-    private  Patient? _patient;
+    private Patient? _patient;
     private readonly IPatientService _patientService;
 
     #region Анкета
-    
+
     private string _fullName = string.Empty;
     public string FullName
     {
@@ -89,8 +85,8 @@ public class PatientViewModel : BaseViewModel
     public List<Allergy> Allergies
     {
         get => _allergies;
-        set =>SetProperty(ref _allergies, value);
-       
+        set => SetProperty(ref _allergies, value);
+
     }
     private List<ChronicDiseases> _chronicDiseases;
     public List<ChronicDiseases> ChronicDiseases
@@ -144,16 +140,16 @@ public class PatientViewModel : BaseViewModel
     public ObservableCollection<VisitHistory> VisitHistories
     {
         get => _visitHistories;
-        set 
-            {
+        set
+        {
             SetProperty(ref _visitHistories, value);
             MessageBox.Show($"VisitHistories установлен: {value?.Count}");
         }
-            
+
     }
 
     private List<RecipeHistory> _recipes;
-   public List<RecipeHistory> Recipes
+    public List<RecipeHistory> Recipes
     {
         get => _recipes;
         set => SetProperty(ref _recipes, value);
@@ -163,19 +159,43 @@ public class PatientViewModel : BaseViewModel
     public VisitHistory SelectedVisit
     {
         get => _selectedVisit;
-        set 
-        { 
+        set
+        {
             SetProperty(ref _selectedVisit, value);
             LoadVisitDetails(value);
         }
     }
     #endregion
 
+    #region Мои записи
+
+    private ObservableCollection<Appointment> _appointments = new();
+    public ObservableCollection<Appointment> Appointments
+    {
+        get => _appointments;
+        set => SetProperty(ref _appointments, value);
+    }
+
+    private Appointment? _selectedAppointment;
+    public Appointment? SelectedAppointment
+    {
+        get => _selectedAppointment;
+        set => SetProperty(ref _selectedAppointment, value);
+    }
+
+    public ICommand OpenCreateAppointmentCommand { get; }
+    public ICommand OpenEditAppointmentCommand { get; }
+    public ICommand CancelAppointmentCommand { get; }
+
+    #endregion
+
     public PatientViewModel(User user, IPatientService patientService)
     {
         _user = user;
         _patientService = patientService;
+
         _ = LoadData();
+
         OpenRedAnketaCommand = new RelayCommand(
             _ =>
             {
@@ -184,69 +204,191 @@ public class PatientViewModel : BaseViewModel
                     MessageBox.Show("Данные пациента ещё не загружены.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
                 var viewModel = new Anketa_RedViewModel(_user, _patient, _patientService);
                 var window = new Anketa_Red(viewModel);
+
                 viewModel.OnSaveSuccess += () => _ = LoadData();
+
                 window.Show();
             });
+
+        OpenCreateAppointmentCommand = new RelayCommand(
+            _ => OpenCreateAppointmentWindow());
+
+        OpenEditAppointmentCommand = new RelayCommand(
+            _ => OpenEditAppointmentWindow());
+
+        CancelAppointmentCommand = new RelayCommand(
+            _ => _ = CancelAppointmentAsync());
     }
 
+    private void OpenCreateAppointmentWindow()
+    {
+        if (_patient == null)
+        {
+            MessageBox.Show(
+                "Данные пациента ещё не загружены.",
+                "Ошибка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+
+            return;
+        }
+
+        var viewModel = new AppointmentWindowViewModel(_patient, _patientService);
+        var window = new AppointmentWindow(viewModel);
+
+        viewModel.OnSaveSuccess += () => _ = LoadData();
+
+        window.Owner = Application.Current.MainWindow;
+        window.ShowDialog();
+    }
+
+    private void OpenEditAppointmentWindow()
+    {
+        if (_patient == null)
+        {
+            MessageBox.Show(
+                "Данные пациента ещё не загружены.",
+                "Ошибка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+
+            return;
+        }
+
+        if (SelectedAppointment == null)
+        {
+            MessageBox.Show(
+                "Выберите запись, которую хотите редактировать.",
+                "Редактирование записи",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+
+            return;
+        }
+
+        var viewModel = new AppointmentWindowViewModel(
+            _patient,
+            _patientService,
+            SelectedAppointment);
+
+        var window = new AppointmentWindow(viewModel);
+
+        viewModel.OnSaveSuccess += () => _ = LoadData();
+
+        window.Owner = Application.Current.MainWindow;
+        window.ShowDialog();
+    }
+
+    private async Task CancelAppointmentAsync()
+    {
+        if (SelectedAppointment == null)
+        {
+            MessageBox.Show(
+                "Выберите запись, которую хотите отменить.",
+                "Отмена записи",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+
+            return;
+        }
+
+        var result = MessageBox.Show(
+            "Вы действительно хотите отменить выбранную запись?",
+            "Подтверждение",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (result != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        try
+        {
+            await _patientService.DeleteAppointmentByIdAsync(SelectedAppointment.Id);
+
+            Appointments.Remove(SelectedAppointment);
+            SelectedAppointment = null;
+
+            MessageBox.Show(
+                "Запись успешно отменена.",
+                "Готово",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                ex.Message,
+                "Ошибка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
     public void LoadVisitDetails(VisitHistory visitHistory)
     {
-        if(visitHistory != null)
+        if (visitHistory != null)
         {
 
-            Date= SelectedVisit.VisitDate;
+            Date = SelectedVisit.VisitDate;
             DoctorName = SelectedVisit.Appointment.Doctor.Full_Name;
             MedServiceName = SelectedVisit.MedService.ServiceName;
             VisitResults = SelectedVisit.VisitResults;
             Analyses = SelectedVisit.AnalysisHistories.ToList();
             Recipes = SelectedVisit.RecipeHistories.ToList();
 
-        }   
+        }
     }
     private async Task LoadData()
     {
-       
-            var patient_medcard = await _patientService.GetMedCardByUserIdAsync(_user.Id);
-       
-            if (patient_medcard == null)
-            {
-                MessageBox.Show("Пациент не найден в базе данных.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
 
-            // подгружаем историю посещений
-            var visitHistory = await _patientService.GetVisitHistoryByUserIdAsync(patient_medcard.Id);
-      
-        if (visitHistory != null )
+        var patient_medcard = await _patientService.GetMedCardByUserIdAsync(_user.Id);
+
+        if (patient_medcard == null)
+        {
+            MessageBox.Show("Пациент не найден в базе данных.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        // подгружаем историю посещений
+        var visitHistory = await _patientService.GetVisitHistoryByUserIdAsync(patient_medcard.Id);
+
+        if (visitHistory != null)
         {
             VisitHistories = new ObservableCollection<VisitHistory>(visitHistory);
         }
+        var appointments = await _patientService.GetAppointmentsByUserIdAsync(patient_medcard.Id);
+
+        Appointments = new ObservableCollection<Appointment>(appointments);
+
+        SelectedAppointment = Appointments.FirstOrDefault();
 
         _patient = patient_medcard;
-            FullName = _user.Full_Name;
-            PhoneNumber = patient_medcard.Phone_number;
-            Address = patient_medcard.Address;
-            InsurancePolicy = patient_medcard.Insurance_Policy;
-            Photo = PhotoCoverter.ConvertToImageSourse(patient_medcard.Photo);
-   
+        FullName = _user.Full_Name;
+        PhoneNumber = patient_medcard.Phone_number;
+        Address = patient_medcard.Address;
+        InsurancePolicy = patient_medcard.Insurance_Policy;
+        Photo = PhotoCoverter.ConvertToImageSourse(patient_medcard.Photo);
+
 
         if (patient_medcard.MedCard != null)
-            {
-                Disability = (patient_medcard.MedCard.Disability ?? false) ? "Есть" : "Нет";
-                GroupBlood = patient_medcard.MedCard.BloodGroup?.Name ?? "Не указана";
-                Allergies = patient_medcard.MedCard.AllergyPatient.Select(a => a.Allergy).ToList();
-                BurthDate = patient_medcard.MedCard.DateOfBirth;
-                ChronicDiseases= patient_medcard.MedCard.HronicDiseasesPatient.Select(a => a.ChronicDiseases).ToList();
-                BloodFator = patient_medcard.MedCard.BloodGroup?.RhFactor ?? "";
-            }
+        {
+            Disability = (patient_medcard.MedCard.Disability ?? false) ? "Есть" : "Нет";
+            GroupBlood = patient_medcard.MedCard.BloodGroup?.Name ?? "Не указана";
+            Allergies = patient_medcard.MedCard.AllergyPatient.Select(a => a.Allergy).ToList();
+            BurthDate = patient_medcard.MedCard.DateOfBirth;
+            ChronicDiseases = patient_medcard.MedCard.HronicDiseasesPatient.Select(a => a.ChronicDiseases).ToList();
+            BloodFator = patient_medcard.MedCard.BloodGroup?.RhFactor ?? "";
+        }
     }
 
- 
-
-   public ICommand OpenRedAnketaCommand { get; }
 
 
-   
+    public ICommand OpenRedAnketaCommand { get; }
+
+
+
 }

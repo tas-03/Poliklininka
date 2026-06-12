@@ -1,0 +1,102 @@
+﻿<Window x:Class="Poliklininka.Views.Patient_View.Dialogs.AppointmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding WindowTitle}"
+        Height="390"
+        Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#FFE5E5E5">
+
+    <Grid Margin="20">
+        <TextBlock Text="{Binding WindowTitle}"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,5,0,0"/>
+
+        <TextBlock Text="Процедура:"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="25,65,0,0"
+                   Width="110"/>
+
+        <ComboBox ItemsSource="{Binding MedServices}"
+                  SelectedItem="{Binding SelectedMedService, Mode=TwoWay}"
+                  DisplayMemberPath="ServiceName"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="150,60,0,0"
+                  Width="270"
+                  Height="28"/>
+
+        <TextBlock Text="Врач:"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="25,115,0,0"
+                   Width="110"/>
+
+        <ComboBox ItemsSource="{Binding Doctors}"
+                  SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                  DisplayMemberPath="Full_Name"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="150,110,0,0"
+                  Width="270"
+                  Height="28"/>
+
+        <TextBlock Text="Время:"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="25,165,0,0"
+                   Width="110"/>
+
+        <ComboBox ItemsSource="{Binding Schedules}"
+                  SelectedItem="{Binding SelectedSchedule, Mode=TwoWay}"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="150,160,0,0"
+                  Width="270"
+                  Height="28">
+
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding StartTime}"/>
+                        <Run Text=" - "/>
+                        <Run Text="{Binding EndTime}"/>
+                        <Run Text=", каб. "/>
+                        <Run Text="{Binding Office}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Text="Сначала выберите процедуру, затем врача и свободное время приема."
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="25,220,0,0"
+                   Width="400"
+                   TextWrapping="Wrap"
+                   Foreground="#555555"/>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,25,15">
+
+            <Button Content="Сохранить"
+                    Width="100"
+                    Height="30"
+                    Margin="0,0,10,0"
+                    Command="{Binding SaveCommand}"/>
+
+            <Button Content="Закрыть"
+                    Width="100"
+                    Height="30"
+                    Command="{Binding CloseCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

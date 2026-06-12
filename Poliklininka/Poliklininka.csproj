@@ -39,7 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Admin_Model\" />
     <Folder Include="Views\Admin_View\Controls\" />
     <Folder Include="Views\Doctor_View\Controls\" />
     <Folder Include="Views\Doctor_View\Dialogs\" />

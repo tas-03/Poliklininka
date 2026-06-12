@@ -5,6 +5,9 @@ using Poliklininka.Infrastructure.EF;
 using Poliklininka.Services;
 using Poliklininka.ViewModels.Auth_Model;
 using System.Windows;
+using Poliklininka.Services.Admin;
+using Poliklininka.ViewModels.Admin_Model;
+using Poliklininka.Views.Admin_View;
 
 namespace Poliklininka;
 
@@ -31,6 +34,9 @@ public partial class App : Application
 
         services.AddTransient<AuthModel>();
         services.AddTransient<Login_Window>();
+        services.AddScoped<IAdminAdoService>(_ => new AdminAdoService(connectionString));
+        services.AddTransient<AdminViewModel>();
+        services.AddTransient<AdminWindow>();
 
         _serviceProvider = services.BuildServiceProvider();
 

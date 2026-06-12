@@ -8,4 +8,5 @@ public class MedService
     public string Category { get; set; } = string.Empty;
 
     public ICollection<VisitHistory> VisitHistories { get; set; } = [];
+    public ICollection<Appointment> Appointments { get; set; } = [];
 }

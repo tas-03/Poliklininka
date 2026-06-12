@@ -4,6 +4,9 @@ using Poliklininka.Services;
 using Poliklininka.ViewModels.Patient_Model;
 using System.Windows;
 using System.Windows.Input;
+using Poliklininka.Services.Admin;
+using Poliklininka.ViewModels.Admin_Model;
+using Poliklininka.Views.Admin_View;
 
 namespace Poliklininka.ViewModels.Auth_Model;
 
@@ -11,6 +14,7 @@ public class AuthModel : BaseViewModel
 {
     private readonly IAuthService _authService;
     private readonly IPatientService _patientService;
+    private readonly IAdminAdoService _adminAdoService;
     public event Action? OnLoginSuccess;
 
     private string _parol = string.Empty;
@@ -26,10 +30,11 @@ public class AuthModel : BaseViewModel
         set => SetProperty(ref _login, value);
     }
 
-    public AuthModel(IAuthService authService, IPatientService patientService)
+    public AuthModel(IAuthService authService,IPatientService patientService,IAdminAdoService adminAdoService)
     {
         _authService = authService;
         _patientService = patientService;
+        _adminAdoService = adminAdoService;
         AuthCommand = new RelayCommand(
            async _ => {
               var user = await authService.LoginAsync(Login, Parol);
@@ -58,12 +63,16 @@ public class AuthModel : BaseViewModel
                 PatientWindow.Show();
                 OnLoginSuccess?.Invoke();
                 break;
-            //case "Admin":
-            //    var viewModelAdmin = new PatientViewModel(user, _patientService);
-            //    var PatientWindow = new PatientWindow(viewModelAdmin);
-            //    PatientWindow.Show();
-            //    OnLoginSuccess?.Invoke();
-            //    break;
+            case "Admin":
+                var viewModelAdmin = new AdminViewModel(_adminAdoService);
+                var adminWindow = new AdminWindow(viewModelAdmin);
+                adminWindow.Show();
+                OnLoginSuccess?.Invoke();
+                break;
+
+            default:
+                MessageBox.Show("Для этой роли окно пока не настроено.");
+                break;
         }
     }
 }

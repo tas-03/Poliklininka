@@ -9,9 +9,11 @@ public class Appointment
     public DateTime AppointmentDate { get; set; }
     public string BookingStatus { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+    public int? MedServiceId { get; set; }
 
     public Patient Patient { get; set; } = null!;
     public Doctor Doctor { get; set; } = null!;
     public Schedule Schedule { get; set; } = null!;
     public VisitHistory? VisitHistory { get; set; }
+    public MedService? MedService { get; set; }
 }

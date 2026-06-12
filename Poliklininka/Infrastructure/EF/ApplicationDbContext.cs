@@ -26,7 +26,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<AllergyPatient> AllergyPatients { get; set; } = null!;
     public DbSet<Allergy> Allergies { get; set; } = null!;
     public DbSet<ChronicDiseases> ChronicDiseases { get; set; } = null!;
-    public DbSet<ÑronicDiseasesPatient> ÑronicDiseasesPatient {  get; set; } = null!;
+    public DbSet<ÑronicDiseasesPatient> ÑronicDiseasesPatient { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,7 +34,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<ChronicDiseases>(e =>
         {
             e.ToTable("ñronic_diseases");
-            e.HasKey(e =>e.Id);
+            e.HasKey(e => e.Id);
             e.Property(e => e.Id).HasColumnName("id").IsRequired();
             e.Property(e => e.Name).HasColumnName("name").IsRequired();
             e.Property(e => e.Code).HasColumnName("code").IsRequired();
@@ -116,9 +116,9 @@ public class ApplicationDbContext : DbContext
             e.Property(m => m.Id).HasColumnName("id");
             e.Property(m => m.PatientId).HasColumnName("patient_id");
             e.Property(m => m.BloodGroupId).HasColumnName("blood_group_id");
-          
+
             e.Property(m => m.OpenDate).HasColumnName("open_date");
-           
+
             e.Property(m => m.Disability).HasColumnName("disability");
             e.Property(m => m.DateOfBirth).HasColumnName("date_of_birth");
 
@@ -193,6 +193,14 @@ public class ApplicationDbContext : DbContext
             e.HasOne(a => a.Schedule)
              .WithMany(s => s.Appointments)
              .HasForeignKey(a => a.ScheduleId);
+
+            e.Property(e => e.MedServiceId)
+             .HasColumnName("med_service_id");
+
+            e.HasOne(e => e.MedService)
+             .WithMany(e => e.Appointments)
+             .HasForeignKey(e => e.MedServiceId)
+             .OnDelete(DeleteBehavior.Restrict);
         });
 
 

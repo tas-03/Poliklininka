@@ -1,12 +1,212 @@
-﻿<Window x:Class="Poliklininka.AdminWindow"
+﻿<Window x:Class="Poliklininka.Views.Admin_View.AdminWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Poliklininka"
-        mc:Ignorable="d"
-        Title="AdminWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="Добавить пользователя" HorizontalAlignment="Left" Height="32" Margin="51,53,0,0" VerticalAlignment="Top" Width="242" Click="Button_Click"/>
+        Title="Панель администратора"
+        Height="689"
+        Width="966"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFE5E5E5">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Панель администратора"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       DockPanel.Dock="Left"/>
+
+            <Button Content="Обновить"
+                    Width="100"
+                    Height="28"
+                    DockPanel.Dock="Right"
+                    Command="{Binding RefreshCommand}"/>
+        </DockPanel>
+
+        <TabControl Grid.Row="1">
+
+            <TabItem Header="Пользователи">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="530"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListView Grid.Column="0"
+                              ItemsSource="{Binding Users}"
+                              SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID"
+                                                DisplayMemberBinding="{Binding Id}"
+                                                Width="45"/>
+
+                                <GridViewColumn Header="ФИО"
+                                                DisplayMemberBinding="{Binding FullName}"
+                                                Width="180"/>
+
+                                <GridViewColumn Header="Логин"
+                                                DisplayMemberBinding="{Binding Login}"
+                                                Width="110"/>
+
+                                <GridViewColumn Header="Роль"
+                                                DisplayMemberBinding="{Binding Role}"
+                                                Width="90"/>
+
+                                <GridViewColumn Header="Специализация"
+                                                DisplayMemberBinding="{Binding Specialization}"
+                                                Width="100"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Grid Grid.Column="1" Margin="25,0,0,0">
+
+                        <TextBlock Text="Данные пользователя"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+
+                        <TextBlock Text="ФИО:"
+                                   Margin="10,50,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,45,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Логин:"
+                                   Margin="10,90,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,85,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Пароль:"
+                                   Margin="10,130,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,125,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Роль:"
+                                   Margin="10,170,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <ComboBox ItemsSource="{Binding Roles}"
+                                  SelectedItem="{Binding SelectedUser.Role, Mode=TwoWay}"
+                                  Margin="140,165,10,0"
+                                  Height="27"
+                                  VerticalAlignment="Top"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                                BorderThickness="1"
+                                Height="1"
+                                Margin="10,210,10,0"
+                                VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Данные пациента"
+                                   FontWeight="Bold"
+                                   Margin="10,225,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Телефон:"
+                                   Margin="10,260,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,255,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Полис ОМС:"
+                                   Margin="10,300,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.InsurancePolicy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,295,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Адрес:"
+                                   Margin="10,340,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,335,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                                BorderThickness="1"
+                                Height="1"
+                                Margin="10,375,10,0"
+                                VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Данные врача"
+                                   FontWeight="Bold"
+                                   Margin="10,390,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Специализация:"
+                                   Margin="10,425,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.Specialization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,420,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Кабинет:"
+                                   Margin="10,465,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedUser.Office, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,460,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Margin="0,0,0,10">
+
+                            <Button Content="Новый"
+                                    Width="75"
+                                    Height="28"
+                                    Margin="0,0,6,0"
+                                    Command="{Binding NewUserCommand}"/>
+
+                            <Button Content="Добавить"
+                                    Width="85"
+                                    Height="28"
+                                    Margin="0,0,6,0"
+                                    Command="{Binding AddUserCommand}"/>
+
+                            <Button Content="Сохранить"
+                                    Width="85"
+                                    Height="28"
+                                    Margin="0,0,6,0"
+                                    Command="{Binding UpdateUserCommand}"/>
+
+                            <Button Content="Удалить"
+                                    Width="75"
+                                    Height="28"
+                                    Command="{Binding DeleteUserCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>

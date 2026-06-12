@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Poliklininka"
         mc:Ignorable="d"
-        Title="PatientWindow" Height="495" Width="861">
+        Title="PatientWindow" Height="507" Width="870">
     <Grid HorizontalAlignment="Center" Width="850" >
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <TabControl  HorizontalAlignment="Center"  VerticalAlignment="Top" Width="832">
             <TabItem  Name="TabАнкета" Header="Анкета" Margin="-2,-2,-2,0">
-                <Grid Margin="0,0,-6,0">
+                <Grid Margin="0,0,-6,0"  Background="#FFE5E5E5">
                     <Grid  Height="410" Margin="10,0,484,0" VerticalAlignment="Center" >
                         <TextBlock x:Name ="FIO" Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="18" Margin="10,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" RenderTransformOrigin="0.457,0.579" Text="Полное имя:"/>
                         <TextBlock  x:Name ="number" Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="18" Margin="10,213,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="88" Text="Телефон:"/>
@@ -91,23 +91,27 @@
             </TabItem>
 
             <TabItem  Name="TabИстория" Header="История посещений" >
-                <Grid>
-                    <ListView HorizontalAlignment="Left" Margin="0,10,0,7" Width="298" ItemsSource="{Binding VisitHistories}" SelectedItem="{Binding SelectedVisit,  Mode=TwoWay}">
+                <Grid  Background="#FFE5E5E5" Height="438">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="217*"/>
+                        <ColumnDefinition Width="610*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView HorizontalAlignment="Left" Margin="0,10,0,7" Width="328" ItemsSource="{Binding VisitHistories}" SelectedItem="{Binding SelectedVisit,  Mode=TwoWay}" Grid.ColumnSpan="2">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header ="Дата" DisplayMemberBinding="{Binding VisitDate}" Width="70" />
+                                <GridViewColumn Header ="Дата" DisplayMemberBinding="{Binding VisitDate}" Width="75" />
                                 <GridViewColumn Header ="Специализация" DisplayMemberBinding="{Binding Appointment.Doctor.Specialization }" Width="100"/>
                                 <GridViewColumn Header ="Имя врача" DisplayMemberBinding="{Binding Appointment.Doctor.Full_Name}" Width="150"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="303,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"><Run Text="Дата"/><Run Language="ru-ru" Text=":"/></TextBlock>
-                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="303,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"><Run Language="ru-ru" Text="Врач:"/></TextBlock>
-                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="303,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"><Run Language="ru-ru" Text="Услуга"/><Run Text=":"/></TextBlock>
+                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="116,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Grid.Column="1"><Run Text="Дата"/><Run Language="ru-ru" Text=":"/></TextBlock>
+                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="116,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Grid.Column="1"><Run Language="ru-ru" Text="Врач:"/></TextBlock>
+                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="116,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Grid.Column="1"><Run Language="ru-ru" Text="Услуга"/><Run Text=":"/></TextBlock>
 
 
-                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="303,221,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"><Run Language="ru-ru" Text="Анализы"/><Run Text=":"/></TextBlock>
-                    <ListView HorizontalAlignment="Left" Height="90" Margin="432,221,0,0" VerticalAlignment="Top" Width="389" ItemsSource="{Binding Analyses}">
+                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="116,182,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Grid.Column="1"><Run Language="ru-ru" Text="Анализы"/><Run Text=":"/></TextBlock>
+                    <ListView HorizontalAlignment="Left" Height="90" Margin="216,182,0,0" VerticalAlignment="Top" Width="389" ItemsSource="{Binding Analyses}" Grid.Column="1">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header ="Название" DisplayMemberBinding="{Binding Analysis.AnalysisName}" Width="200" />
@@ -117,8 +121,8 @@
                         </ListView.View>
                     </ListView>
 
-                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="22" Margin="303,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"><Run Language="ru-ru" Text="Рецепты"/><Run Text=":"/></TextBlock>
-                    <ListView HorizontalAlignment="Left" Height="90" Margin="432,335,0,0" VerticalAlignment="Top" Width="389" ItemsSource="{Binding Recipes}">
+                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="22" Margin="116,301,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Grid.Column="1"><Run Language="ru-ru" Text="Рецепты"/><Run Text=":"/></TextBlock>
+                    <ListView HorizontalAlignment="Left" Height="90" Margin="216,301,0,0" VerticalAlignment="Top" Width="389" ItemsSource="{Binding Recipes}" Grid.Column="1">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header ="Название" DisplayMemberBinding="{Binding Recipe.Description}" Width="180" />
@@ -127,17 +131,318 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="303,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"><Run Language="ru-ru" Text="Заключение"/><Run Text=":"/></TextBlock>
+                    <TextBlock Style="{StaticResource LabelText}" HorizontalAlignment="Left" Height="23" Margin="116,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Grid.Column="1"><Run Language="ru-ru" Text="Заключение"/><Run Text=":"/></TextBlock>
 
-                    <TextBlock HorizontalAlignment="Left" Height="23" Margin="413,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403" Text="{Binding  Date}"/>
-                    <TextBlock HorizontalAlignment="Left" Height="23" Margin="413,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403" Text="{Binding  DoctorName}"/>
-                    <TextBlock HorizontalAlignment="Left" Height="23" Margin="413,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403" Text="{Binding  MedServiceName}"/>
-                    <TextBlock HorizontalAlignment="Left" Height="112" Margin="413,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403" Text="{Binding  VisitResults}"/>
+                    <TextBlock HorizontalAlignment="Left" Height="23" Margin="196,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403" Text="{Binding  Date}" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" Height="23" Margin="196,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403" Text="{Binding  DoctorName}" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" Height="23" Margin="196,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403" Text="{Binding  MedServiceName}" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" Height="83" Margin="216,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" Text="{Binding  VisitResults}" Grid.Column="1"/>
 
                 </Grid>
             </TabItem>
             <TabItem Name="TabЗаписи" Header="Мои записи">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5" Height="438">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="78.5"/>
+                        <ColumnDefinition Width="281.5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Левая часть: список записей -->
+                    <Grid Grid.Column="0" Margin="10,10,0,10" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                       Style="{StaticResource TitleText}"
+                       HorizontalAlignment="Center"
+                       Height="24"
+                       TextWrapping="Wrap"
+                       Text="Мои записи на прием"
+                       Margin="0,0,0,10"/>
+
+                        <ListView Grid.Row="1"
+                      ItemsSource="{Binding Appointments}"
+                      SelectedItem="{Binding SelectedAppointment, Mode=TwoWay}"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      Margin="0,0,0,10">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Дата"
+                                        DisplayMemberBinding="{Binding AppointmentDate}"
+                                        Width="80"/>
+
+                                    <GridViewColumn Header="Врач"
+                                        DisplayMemberBinding="{Binding Doctor.Full_Name}"
+                                        Width="150"/>
+
+                                    <GridViewColumn Header="Статус"
+                                        DisplayMemberBinding="{Binding BookingStatus}"
+                                        Width="90"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+
+                            <Button Content="Записаться"
+                        Width="100"
+                        Height="28"
+                        Margin="0,0,8,0"
+                        Command="{Binding OpenCreateAppointmentCommand}"/>
+
+                            <Button Content="Редактировать"
+                        Width="110"
+                        Height="28"
+                        Margin="0,0,8,0"
+                        Command="{Binding OpenEditAppointmentCommand}"/>
+
+                            <Button Content="Отменить"
+                        Width="90"
+                        Height="28"
+                        Command="{Binding CancelAppointmentCommand}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Правая часть: подробная информация о выбранной записи -->
+                    <Grid Grid.Column="2" Margin="25,10,10,10">
+
+                        <TextBlock Style="{StaticResource TitleText}"
+                       HorizontalAlignment="Center"
+                       Height="24"
+                       Margin="0,0,0,394"
+                       TextWrapping="Wrap"
+                       Text="Информация о записи"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="35,55,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Дата приема:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,55,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.AppointmentDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,77,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="35,95,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Врач:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,95,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.Doctor.Full_Name}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,117,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="35,135,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Специализация:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,135,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.Doctor.Specialization}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,157,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="35,175,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Процедура:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,175,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.MedService.ServiceName}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,197,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="35,215,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Кабинет:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,215,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.Schedule.Office}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,237,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="35,255,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Время начала:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,255,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.Schedule.StartTime}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,277,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="34"
+                       Margin="35,290,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Время окончания:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,295,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.Schedule.EndTime}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,317,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                       HorizontalAlignment="Left"
+                       Height="29"
+                       Margin="35,335,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="130"
+                       Text="Статус:"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="23"
+                       Margin="180,335,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="300"
+                       Text="{Binding SelectedAppointment.BookingStatus}"/>
+
+                        <Border BorderBrush="#2C2C2A"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    Height="1"
+                    Margin="180,357,0,0"
+                    VerticalAlignment="Top"
+                    Width="300"/>
+
+                        <TextBlock HorizontalAlignment="Left"
+                       Height="45"
+                       Margin="35,364,0,0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Top"
+                       Width="396"
+                       Foreground="#555555"
+                       Text="Для создания новой записи нажмите «Записаться». Для изменения выбранной записи выберите её в списке и нажмите «Редактировать»."/>
+                    </Grid>
+
+                    <!-- Разделитель между списком и подробной информацией -->
+                    <Border Grid.Column="2"
+                BorderBrush="#2C2C2A"
+                BorderThickness="1"
+                HorizontalAlignment="Right"
+                CornerRadius="6"
+                Height="425"
+                Margin="0,10,454,0"
+                VerticalAlignment="Top"
+                Width="12"/>
+
+                </Grid>
             </TabItem>
         </TabControl>
 

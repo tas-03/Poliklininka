@@ -1,24 +1,13 @@
-﻿using System.Windows;
-using Poliklininka.Entities;
+﻿using Poliklininka.ViewModels.Admin_Model;
+using System.Windows;
 
-namespace Poliklininka
+namespace Poliklininka.Views.Admin_View;
+
+public partial class AdminWindow : Window
 {
-    /// <summary>
-    /// Логика взаимодействия для AdminWindow.xaml
-    /// </summary>
-    public partial class AdminWindow : Window
+    public AdminWindow(AdminViewModel viewModel)
     {
-        private User _user;
-        public AdminWindow(User user)
-        {
-            _user = user;
-            InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            new New_User(_user).Show();
-
-        }
+        InitializeComponent();
+        DataContext = viewModel;
     }
 }
