@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<class name="HibernateRecipeHistory" table="recipe_histories" lazy="false">
+		<id name="Id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<property name="VisitHistoryId" column="visit_history_id" not-null="true" />
+		<property name="RecipeId" column="recipe_id" not-null="true" />
+		<property name="Duration" column="duration" not-null="true" />
+		<property name="Dosage" column="dosage" not-null="true" />
+
+		<many-to-one name="VisitHistory"
+					 class="HibernateVisitHistory"
+					 column="visit_history_id"
+					 insert="false"
+					 update="false"
+					 lazy="false" />
+
+		<many-to-one name="Recipe"
+					 class="HibernateRecipe"
+					 column="recipe_id"
+					 insert="false"
+					 update="false"
+					 lazy="false" />
+
+	</class>
+
+</hibernate-mapping>

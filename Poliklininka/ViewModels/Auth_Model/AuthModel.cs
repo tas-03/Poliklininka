@@ -8,6 +8,12 @@ using Poliklininka.Services.Admin;
 using Poliklininka.ViewModels.Admin_Model;
 using Poliklininka.Views.Admin_View;
 
+using Poliklininka.ViewModels.Doctor_Model;
+using Poliklininka.Views.Doctor_View;
+using Poliklininka.Services.Hibernate;
+using Poliklininka.Views.Registrar_View;
+using Poliklininka.ViewModels.Registrar_Model;
+
 namespace Poliklininka.ViewModels.Auth_Model;
 
 public class AuthModel : BaseViewModel
@@ -15,6 +21,11 @@ public class AuthModel : BaseViewModel
     private readonly IAuthService _authService;
     private readonly IPatientService _patientService;
     private readonly IAdminAdoService _adminAdoService;
+
+    // добавили NHibernate-сервис врача
+    private readonly IDoctorHibernateService _doctorHibernateService;
+    private readonly IRegistrarService _registrarService;
+
     public event Action? OnLoginSuccess;
 
     private string _parol = string.Empty;
@@ -23,6 +34,7 @@ public class AuthModel : BaseViewModel
         get => _parol;
         set => SetProperty(ref _parol, value);
     }
+
     private string _login = string.Empty;
     public string Login
     {
@@ -30,43 +42,67 @@ public class AuthModel : BaseViewModel
         set => SetProperty(ref _login, value);
     }
 
-    public AuthModel(IAuthService authService,IPatientService patientService,IAdminAdoService adminAdoService)
+    public AuthModel(
+        IAuthService authService,
+        IPatientService patientService,
+        IAdminAdoService adminAdoService,
+        IDoctorHibernateService doctorHibernateService,
+        IRegistrarService registrarService)
     {
         _authService = authService;
         _patientService = patientService;
         _adminAdoService = adminAdoService;
+        _doctorHibernateService = doctorHibernateService;
+        _registrarService = registrarService;
+
         AuthCommand = new RelayCommand(
-           async _ => {
-              var user = await authService.LoginAsync(Login, Parol);
-               if (user != null) { 
-               OpenWindow(user);
-               }
-               else
-               {
-                   MessageBox.Show("Вы не зарегистрированы! Обратитесь с администратору!");
-               }
+            async _ =>
+            {
+                var user = await authService.LoginAsync(Login, Parol);
 
-               },
+                if (user != null)
+                {
+                    OpenWindow(user);
+                }
+                else
+                {
+                    MessageBox.Show("Вы не зарегистрированы! Обратитесь с администратору!");
+                }
+            },
             _ => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Parol));
-
     }
-   public ICommand AuthCommand { get; }
 
- 
+    public ICommand AuthCommand { get; }
+
     public void OpenWindow(User user)
     {
         switch (user.Role)
         {
             case "Patient":
                 var viewModelPatient = new PatientViewModel(user, _patientService);
-                var PatientWindow = new PatientWindow(viewModelPatient);
-                PatientWindow.Show();
+                var patientWindow = new PatientWindow(viewModelPatient);
+                patientWindow.Show();
                 OnLoginSuccess?.Invoke();
                 break;
+
             case "Admin":
                 var viewModelAdmin = new AdminViewModel(_adminAdoService);
                 var adminWindow = new AdminWindow(viewModelAdmin);
                 adminWindow.Show();
+                OnLoginSuccess?.Invoke();
+                break;
+
+            case "Doctor":
+                var viewModelDoctor = new DoctorViewModel(user, _doctorHibernateService);
+                var doctorWindow = new DoctorWindow(viewModelDoctor);
+                doctorWindow.Show();
+                OnLoginSuccess?.Invoke();
+                break;
+
+            case "Registrar":
+                var viewModelRegistrar = new RegistrarViewModel(user, _registrarService);
+                var registrarWindow = new RegistrarWindow(viewModelRegistrar);
+                registrarWindow.Show();
                 OnLoginSuccess?.Invoke();
                 break;
 

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<class name="HibernateRecipe" table="recipes" lazy="false">
+		<id name="Id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<property name="Description" column="description" not-null="true" />
+
+		<bag name="RecipeHistories" inverse="true" cascade="none" lazy="true">
+			<key column="recipe_id" />
+			<one-to-many class="HibernateRecipeHistory" />
+		</bag>
+
+	</class>
+
+</hibernate-mapping>

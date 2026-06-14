@@ -1,0 +1,467 @@
+﻿<Window x:Class="Poliklininka.Views.Registrar_View.RegistrarWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Панель регистратора"
+        Height="689"
+        Width="966"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFE5E5E5">
+
+    <Grid Margin="15" Style="{StaticResource MainGridStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,10">
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Панель регистратора"
+                           Style="{StaticResource TitleText}"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Left"/>
+
+                <TextBlock Text="{Binding RegistrarName, Mode=OneWay}"
+                           Style="{StaticResource ValueText}"
+                           FontSize="13"
+                           Margin="0,3,0,0"/>
+            </StackPanel>
+
+            <Button Content="Обновить"
+                    Width="100"
+                    Height="28"
+                    DockPanel.Dock="Right"
+                    Command="{Binding RefreshCommand}"/>
+        </DockPanel>
+
+        <TabControl Grid.Row="1">
+
+            <TabItem Header="Пациенты">
+                <Grid Margin="10" Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="540"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0">
+                            <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Height="27"
+                                     Margin="0,0,8,0"
+                                     DockPanel.Dock="Left"/>
+
+                            <Button Content="Поиск"
+                                    Width="80"
+                                    Height="27"
+                                    DockPanel.Dock="Right"
+                                    Command="{Binding SearchPatientsCommand}"/>
+                        </DockPanel>
+
+                        <ListView Grid.Row="2"
+                                  ItemsSource="{Binding Patients}"
+                                  SelectedItem="{Binding SelectedPatient, Mode=TwoWay}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="ID"
+                                                    DisplayMemberBinding="{Binding Id}"
+                                                    Width="45"/>
+
+                                    <GridViewColumn Header="ФИО"
+                                                    DisplayMemberBinding="{Binding Full_Name}"
+                                                    Width="180"/>
+
+                                    <GridViewColumn Header="Телефон"
+                                                    DisplayMemberBinding="{Binding Phone_number}"
+                                                    Width="110"/>
+
+                                    <GridViewColumn Header="Полис"
+                                                    DisplayMemberBinding="{Binding Insurance_Policy}"
+                                                    Width="120"/>
+
+                                    <GridViewColumn Header="Адрес"
+                                                    DisplayMemberBinding="{Binding Address}"
+                                                    Width="130"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+
+                    <Grid Grid.Column="1" Margin="25,0,0,0">
+                        <TextBlock Text="Данные пациента"
+                                   Style="{StaticResource TitleText}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+
+                        <TextBlock Text="ФИО:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,50,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding PatientFullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,45,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Логин:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,90,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding PatientLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,85,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Пароль:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,130,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding PatientPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,125,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Телефон:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,170,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding PatientPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,165,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Полис ОМС:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,210,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding PatientInsurancePolicy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,205,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <TextBlock Text="Адрес:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,250,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding PatientAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="140,245,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"/>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Margin="0,0,0,10">
+
+                            <Button Content="Новый"
+                                    Width="75"
+                                    Height="28"
+                                    Margin="0,0,6,0"
+                                    Command="{Binding NewPatientCommand}"/>
+
+                            <Button Content="Добавить"
+                                    Width="85"
+                                    Height="28"
+                                    Margin="0,0,6,0"
+                                    Command="{Binding CreatePatientCommand}"/>
+
+                            <Button Content="Сохранить"
+                                    Width="85"
+                                    Height="28"
+                                    Command="{Binding UpdatePatientCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Расписание врачей">
+                <Grid Margin="10" Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="330"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <TextBlock Text="Врачи"
+                                   Style="{StaticResource TitleText}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+
+                        <ListView ItemsSource="{Binding Doctors}"
+                                  SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                                  Margin="0,40,0,0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="ФИО"
+                                                    DisplayMemberBinding="{Binding Full_Name}"
+                                                    Width="160"/>
+
+                                    <GridViewColumn Header="Специализация"
+                                                    DisplayMemberBinding="{Binding Specialization}"
+                                                    Width="120"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+
+                    <Border Grid.Column="1"
+                            Style="{StaticResource VerticalSeparator}"
+                            HorizontalAlignment="Center"
+                            Height="560"
+                            VerticalAlignment="Center"/>
+
+                    <Grid Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="260"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <TextBlock Text="Новое расписание"
+                                       Style="{StaticResource TitleText}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,5,0,0"/>
+
+                            <TextBlock Text="Дата:"
+                                       Style="{StaticResource LabelText}"
+                                       Margin="10,50,0,0"
+                                       VerticalAlignment="Top"/>
+
+                            <DatePicker SelectedDate="{Binding ScheduleDate, Mode=TwoWay}"
+                                        Margin="100,45,10,0"
+                                        Height="27"
+                                        VerticalAlignment="Top"/>
+
+                            <TextBlock Text="Начало:"
+                                       Style="{StaticResource LabelText}"
+                                       Margin="10,90,0,0"
+                                       VerticalAlignment="Top"/>
+
+                            <TextBox Text="{Binding ScheduleStartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="100,85,10,0"
+                                     Height="27"
+                                     VerticalAlignment="Top"/>
+
+                            <TextBlock Text="Конец:"
+                                       Style="{StaticResource LabelText}"
+                                       Margin="10,130,0,0"
+                                       VerticalAlignment="Top"/>
+
+                            <TextBox Text="{Binding ScheduleEndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="100,125,10,0"
+                                     Height="27"
+                                     VerticalAlignment="Top"/>
+
+                            <TextBlock Text="Кабинет:"
+                                       Style="{StaticResource LabelText}"
+                                       Margin="10,170,0,0"
+                                       VerticalAlignment="Top"/>
+
+                            <TextBox Text="{Binding ScheduleOffice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="100,165,10,0"
+                                     Height="27"
+                                     VerticalAlignment="Top"/>
+
+                            <Button Content="Добавить слот"
+                                    Width="120"
+                                    Height="28"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,220,0,0"
+                                    VerticalAlignment="Top"
+                                    Command="{Binding CreateScheduleCommand}"/>
+
+                            <TextBlock Text="Время вводить так: 08:00"
+                                       Style="{StaticResource HintText}"
+                                       Margin="10,270,10,0"
+                                       VerticalAlignment="Top"/>
+                        </Grid>
+
+                        <Grid Grid.Column="1" Margin="20,0,0,0">
+                            <TextBlock Text="Расписание выбранного врача"
+                                       Style="{StaticResource TitleText}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,5,0,0"/>
+
+                            <ListView ItemsSource="{Binding DoctorSchedules}"
+                                      Margin="0,40,0,0">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Дата"
+                                                        DisplayMemberBinding="{Binding Date}"
+                                                        Width="100"/>
+
+                                        <GridViewColumn Header="Начало"
+                                                        DisplayMemberBinding="{Binding StartTime}"
+                                                        Width="80"/>
+
+                                        <GridViewColumn Header="Конец"
+                                                        DisplayMemberBinding="{Binding EndTime}"
+                                                        Width="80"/>
+
+                                        <GridViewColumn Header="Кабинет"
+                                                        DisplayMemberBinding="{Binding Office}"
+                                                        Width="80"/>
+
+                                        <GridViewColumn Header="Статус"
+                                                        DisplayMemberBinding="{Binding SlotStatus}"
+                                                        Width="80"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Запись на прием">
+                <Grid Margin="10" Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="360"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <TextBlock Text="Оформить запись"
+                                   Style="{StaticResource TitleText}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+
+                        <TextBlock Text="Пациент:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,50,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding SelectedPatient.Full_Name, Mode=OneWay}"
+                                 Margin="120,45,10,0"
+                                 Height="27"
+                                 VerticalAlignment="Top"
+                                 IsReadOnly="True"/>
+
+                        <TextBlock Text="Врач:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,90,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <ComboBox ItemsSource="{Binding Doctors}"
+                                  SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                                  DisplayMemberPath="Full_Name"
+                                  Margin="120,85,10,0"
+                                  Height="27"
+                                  VerticalAlignment="Top"/>
+
+                        <TextBlock
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,125,245,0"
+                                   VerticalAlignment="Top" Height="30"><Run Text="Свободный"/><LineBreak/><Run Text=" слот:"/></TextBlock>
+
+                        <ComboBox ItemsSource="{Binding FreeSchedules}"
+                                  SelectedItem="{Binding SelectedFreeSchedule, Mode=TwoWay}"
+                                  Margin="120,125,10,0"
+                                  Height="27"
+                                  VerticalAlignment="Top">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource ValueText}">
+                                        <Run Text="{Binding Date}"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding StartTime}"/>
+                                        <Run Text=" - "/>
+                                        <Run Text="{Binding EndTime}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="Услуга:"
+                                   Style="{StaticResource LabelText}"
+                                   Margin="10,170,0,0"
+                                   VerticalAlignment="Top"/>
+
+                        <ComboBox ItemsSource="{Binding MedServices}"
+                                  SelectedItem="{Binding SelectedMedService, Mode=TwoWay}"
+                                  DisplayMemberPath="ServiceName"
+                                  Margin="120,165,10,0"
+                                  Height="27"
+                                  VerticalAlignment="Top"/>
+
+                        <Button Content="Записать пациента"
+                                Width="150"
+                                Height="28"
+                                HorizontalAlignment="Center"
+                                Margin="0,220,0,0"
+                                VerticalAlignment="Top"
+                                Command="{Binding CreateAppointmentCommand}"/>
+
+                        <TextBlock Text="Сначала выбери пациента на вкладке Пациенты."
+                                   Style="{StaticResource HintText}"
+                                   Margin="10,270,10,0"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Top"/>
+                    </Grid>
+
+                    <Border Grid.Column="1"
+                            Style="{StaticResource VerticalSeparator}"
+                            HorizontalAlignment="Center"
+                            Height="560"
+                            VerticalAlignment="Center"/>
+
+                    <Grid Grid.Column="2">
+                        <TextBlock Text="Записи выбранного пациента"
+                                   Style="{StaticResource TitleText}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+
+                        <ListView ItemsSource="{Binding PatientAppointments}"
+                                  SelectedItem="{Binding SelectedAppointment, Mode=TwoWay}"
+                                  Margin="0,40,0,45">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="ID"
+                                                    DisplayMemberBinding="{Binding Id}"
+                                                    Width="45"/>
+
+                                    <GridViewColumn Header="Врач"
+                                                    DisplayMemberBinding="{Binding Doctor.Full_Name}"
+                                                    Width="150"/>
+
+                                    <GridViewColumn Header="Дата"
+                                                    DisplayMemberBinding="{Binding AppointmentDate}"
+                                                    Width="130"/>
+
+                                    <GridViewColumn Header="Услуга"
+                                                    DisplayMemberBinding="{Binding MedService.ServiceName}"
+                                                    Width="130"/>
+
+                                    <GridViewColumn Header="Статус"
+                                                    DisplayMemberBinding="{Binding BookingStatus}"
+                                                    Width="90"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <Button Content="Отменить запись"
+                                Width="130"
+                                Height="28"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Margin="0,0,0,10"
+                                Command="{Binding CancelAppointmentCommand}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

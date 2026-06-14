@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<class name="HibernateMedCard" table="med_cards" lazy="false">
+		<id name="Id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<property name="PatientId" column="patient_id" not-null="true" />
+		<property name="BloodGroupId" column="blood_group_id" not-null="false" />
+
+		<property name="DateOfBirth"
+				  column="date_of_birth"
+				  type="Date"
+				  not-null="true" />
+
+		<property name="Disability"
+				  column="disability"
+				  not-null="true" />
+
+		<property name="OpenDate"
+				  column="open_date"
+				  type="Date"
+				  not-null="true" />
+
+		<many-to-one name="Patient"
+					 class="HibernatePatient"
+					 column="patient_id"
+					 unique="true"
+					 insert="false"
+					 update="false"
+					 lazy="false" />
+
+		<many-to-one name="BloodGroup"
+					 class="HibernateBloodGroup"
+					 column="blood_group_id"
+					 insert="false"
+					 update="false"
+					 not-found="ignore"
+					 lazy="false" />
+
+		<!-- Многие-ко-многим: медкарта - аллергии -->
+		<bag name="Allergies"
+			 table="allergy_patient"
+			 cascade="none"
+			 lazy="false">
+			<key column="medcard_id" />
+			<many-to-many class="HibernateAllergy" column="allergy_id" />
+		</bag>
+
+		<!-- Многие-ко-многим: медкарта - хронические заболевания -->
+		<bag name="ChronicDiseases"
+			 table="chronic_diseases_patient"
+			 cascade="none"
+			 lazy="false">
+			<key column="medcard_id" />
+			<many-to-many class="HibernateChronicDisease" column="chronic_diseases_id" />
+		</bag>
+
+	</class>
+
+</hibernate-mapping>

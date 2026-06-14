@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<joined-subclass name="HibernateDoctor"
+					 extends="HibernateUser"
+					 table="doctors"
+					 lazy="false">
+
+		<key column="id" />
+
+		<property name="Specialization" column="specialization" not-null="true" />
+		<property name="Office" column="office" not-null="true" />
+
+		<bag name="Appointments" inverse="true" cascade="none" lazy="true">
+			<key column="doctor_id" />
+			<one-to-many class="HibernateAppointment" />
+		</bag>
+
+	</joined-subclass>
+
+</hibernate-mapping>

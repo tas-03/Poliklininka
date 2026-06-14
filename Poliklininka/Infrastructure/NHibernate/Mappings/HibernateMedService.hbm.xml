@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<class name="HibernateMedService" table="med_services" lazy="false">
+		<id name="Id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<property name="ServiceName" column="service_name" not-null="true" />
+		<property name="Cost" column="cost" not-null="true" />
+		<property name="Category" column="category" not-null="true" />
+
+		<bag name="Appointments" inverse="true" cascade="none" lazy="false">
+			<key column="med_service_id" />
+			<one-to-many class="HibernateAppointment" />
+		</bag>
+
+		<bag name="VisitHistories" inverse="true" cascade="none" lazy="true">
+			<key column="med_service_id" />
+			<one-to-many class="HibernateVisitHistory" />
+		</bag>
+
+	</class>
+
+</hibernate-mapping>

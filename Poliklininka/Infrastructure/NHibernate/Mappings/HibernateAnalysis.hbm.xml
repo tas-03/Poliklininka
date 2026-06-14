@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<class name="HibernateAnalysis" table="analyses" lazy="false">
+		<id name="Id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<property name="AnalysisName" column="analysis_name" not-null="true" />
+		<property name="Description" column="description" not-null="false" />
+
+		<bag name="AnalysisHistories" inverse="true" cascade="none" lazy="true">
+			<key column="analysis_id" />
+			<one-to-many class="HibernateAnalysisHistory" />
+		</bag>
+
+	</class>
+
+</hibernate-mapping>

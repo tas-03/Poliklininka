@@ -33,7 +33,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<ChronicDiseases>(e =>
         {
-            e.ToTable("ñronic_diseases");
+            e.ToTable("chronic_diseases");
             e.HasKey(e => e.Id);
             e.Property(e => e.Id).HasColumnName("id").IsRequired();
             e.Property(e => e.Name).HasColumnName("name").IsRequired();
@@ -42,7 +42,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<ÑronicDiseasesPatient>(e =>
         {
-            e.ToTable("ñronic_diseases_patient");
+            e.ToTable("chronic_diseases_patient");
             e.HasKey(e => new { e.MedCardId, e.ChronicDiseasesId });
             e.Property(e => e.MedCardId).HasColumnName("medcard_id").IsRequired();
             e.Property(e => e.ChronicDiseasesId).HasColumnName("chronic_diseases_id").IsRequired();

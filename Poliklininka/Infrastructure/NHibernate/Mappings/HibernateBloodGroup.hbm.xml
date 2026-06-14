@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<class name="HibernateBloodGroup" table="blood_groups" lazy="false">
+		<id name="Id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<property name="Name" column="name" not-null="true" />
+		<property name="RhFactor" column="rh_factor" not-null="true" />
+		<property name="Office" column="office" not-null="false" />
+
+		<bag name="MedCards" inverse="true" cascade="none" lazy="true">
+			<key column="blood_group_id" />
+			<one-to-many class="HibernateMedCard" />
+		</bag>
+
+	</class>
+
+</hibernate-mapping>

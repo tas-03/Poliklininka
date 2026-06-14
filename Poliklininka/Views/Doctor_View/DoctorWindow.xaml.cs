@@ -1,15 +1,14 @@
 ﻿using System.Windows;
-using Poliklininka.Entities;
+using Poliklininka.ViewModels.Doctor_Model;
 
-namespace Poliklininka;
-
-/// <summary>
-/// Логика взаимодействия для DoctorWindow.xaml
-/// </summary>
-public partial class DoctorWindow : Window
+namespace Poliklininka.Views.Doctor_View
 {
-    public DoctorWindow(User user)
+    public partial class DoctorWindow : Window
     {
-        InitializeComponent();
+        public DoctorWindow(DoctorViewModel viewModel)
+        {
+            InitializeComponent();
+            DataContext = viewModel;
+        }
     }
 }

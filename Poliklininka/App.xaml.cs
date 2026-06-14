@@ -8,6 +8,9 @@ using System.Windows;
 using Poliklininka.Services.Admin;
 using Poliklininka.ViewModels.Admin_Model;
 using Poliklininka.Views.Admin_View;
+using Poliklininka.Infrastructure.NHibernate;
+using Poliklininka.Services.Hibernate;
+
 
 namespace Poliklininka;
 
@@ -27,6 +30,12 @@ public partial class App : Application
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
         var connectionString = config.GetConnectionString("Default");
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException("Не найдена строка подключения Default.");
+        }
+
+        NHibernateHelper.Initialize(connectionString);
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
         services.AddScoped<IAuthService, EFAuthService>();
@@ -37,6 +46,8 @@ public partial class App : Application
         services.AddScoped<IAdminAdoService>(_ => new AdminAdoService(connectionString));
         services.AddTransient<AdminViewModel>();
         services.AddTransient<AdminWindow>();
+        services.AddScoped<IDoctorHibernateService, DoctorHibernateService>();
+        services.AddScoped<IRegistrarService, EFRegistrarService>();
 
         _serviceProvider = services.BuildServiceProvider();
 

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<joined-subclass name="HibernatePatient"
+					 extends="HibernateUser"
+					 table="patients"
+					 lazy="false">
+
+		<key column="id" />
+
+		<property name="Phone_number" column="phone_number" not-null="false" />
+		<property name="Insurance_Policy" column="insurance_policy" not-null="true" />
+		<property name="Address" column="address" not-null="false" />
+
+		<!-- Один-к-одному: пациент - медицинская карта -->
+		<one-to-one name="MedCard"
+					class="HibernateMedCard"
+					property-ref="Patient"
+					cascade="none"
+					lazy="false" />
+
+		<bag name="Appointments" inverse="true" cascade="none" lazy="true">
+			<key column="patient_id" />
+			<one-to-many class="HibernateAppointment" />
+		</bag>
+
+		<bag name="VisitHistories" inverse="true" cascade="none" lazy="true">
+			<key column="patient_id" />
+			<one-to-many class="HibernateVisitHistory" />
+		</bag>
+
+	</joined-subclass>
+
+</hibernate-mapping>

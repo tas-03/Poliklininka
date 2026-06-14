@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Poliklininka"
+                   namespace="Poliklininka.Infrastructure.NHibernate.Models">
+
+	<class name="HibernateAppointment" table="appointments" lazy="false">
+		<id name="Id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<property name="PatientId" column="patient_id" not-null="true" />
+		<property name="DoctorId" column="doctor_id" not-null="true" />
+		<property name="ScheduleId" column="schedule_id" not-null="true" />
+		<property name="MedServiceId" column="med_service_id" not-null="false" />
+
+		<property name="AppointmentDate"
+				  column="appointment_date"
+				  type="DateTime"
+				  not-null="true" />
+
+		<property name="BookingStatus" column="booking_status" not-null="true" />
+
+		<property name="CreatedAt"
+				  column="created_at"
+				  type="DateTime"
+				  not-null="true" />
+
+		<many-to-one name="Patient"
+					 class="HibernatePatient"
+					 column="patient_id"
+					 insert="false"
+					 update="false"
+					 lazy="false" />
+
+		<many-to-one name="Doctor"
+					 class="HibernateDoctor"
+					 column="doctor_id"
+					 insert="false"
+					 update="false"
+					 lazy="false" />
+
+		<many-to-one name="MedService"
+					 class="HibernateMedService"
+					 column="med_service_id"
+					 insert="false"
+					 update="false"
+					 not-found="ignore"
+					 lazy="false" />
+
+		<bag name="VisitHistories" inverse="true" cascade="none" lazy="true">
+			<key column="appointment_id" />
+			<one-to-many class="HibernateVisitHistory" />
+		</bag>
+
+	</class>
+
+</hibernate-mapping>
