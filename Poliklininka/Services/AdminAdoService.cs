@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Poliklininka.Models.Admin;
+using System.Data;
 
 namespace Poliklininka.Services.Admin;
 
@@ -286,6 +287,96 @@ public class AdminAdoService : IAdminAdoService
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    public async Task<DataTable> GetUserDetailsAsync(int userId, string role)
+    {
+        return role switch
+        {
+            "Patient" => await GetPatientAppointmentsAsync(userId),
+            "Doctor" => await GetDoctorAppointmentsAsync(userId),
+            _ => CreateInfoTable("Для этой роли подчинённых данных нет.")
+        };
+    }
+
+    private async Task<DataTable> GetPatientAppointmentsAsync(int patientId)
+    {
+        const string sql = """
+        SELECT
+            a.id AS "ID записи",
+            a.appointment_date AS "Дата приема",
+            du.full_name AS "Врач",
+            COALESCE(ms.service_name, 'Услуга не указана') AS "Услуга",
+            COALESCE(ms.cost, 0) AS "Стоимость",
+            a.booking_status AS "Статус"
+        FROM appointments a
+        JOIN users du ON du.id = a.doctor_id
+        LEFT JOIN med_services ms ON ms.id = a.med_service_id
+        WHERE a.patient_id = @patientId
+        ORDER BY a.appointment_date DESC;
+        """;
+
+        await using var connection = CreateConnection();
+        await connection.OpenAsync();
+
+        await using var command = new NpgsqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@patientId", patientId);
+
+        await using var reader = await command.ExecuteReaderAsync();
+
+        var table = new DataTable();
+        table.Load(reader);
+
+        if (table.Rows.Count == 0)
+        {
+            return CreateInfoTable("У выбранного пациента пока нет записей на прием.");
+        }
+
+        return table;
+    }
+
+    private async Task<DataTable> GetDoctorAppointmentsAsync(int doctorId)
+    {
+        const string sql = """
+        SELECT
+            a.id AS "ID записи",
+            a.appointment_date AS "Дата приема",
+            pu.full_name AS "Пациент",
+            COALESCE(ms.service_name, 'Услуга не указана') AS "Услуга",
+            COALESCE(ms.cost, 0) AS "Стоимость",
+            a.booking_status AS "Статус"
+        FROM appointments a
+        JOIN users pu ON pu.id = a.patient_id
+        LEFT JOIN med_services ms ON ms.id = a.med_service_id
+        WHERE a.doctor_id = @doctorId
+        ORDER BY a.appointment_date DESC;
+        """;
+
+        await using var connection = CreateConnection();
+        await connection.OpenAsync();
+
+        await using var command = new NpgsqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@doctorId", doctorId);
+
+        await using var reader = await command.ExecuteReaderAsync();
+
+        var table = new DataTable();
+        table.Load(reader);
+
+        if (table.Rows.Count == 0)
+        {
+            return CreateInfoTable("У выбранного врача пока нет приемов.");
+        }
+
+        return table;
+    }
+
+    private static DataTable CreateInfoTable(string message)
+    {
+        var table = new DataTable();
+        table.Columns.Add("Информация");
+        table.Rows.Add(message);
+        return table;
     }
 
     private static string GetDiscriminatorByRole(string role)

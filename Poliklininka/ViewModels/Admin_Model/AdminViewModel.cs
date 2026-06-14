@@ -1,8 +1,8 @@
 ﻿using Poliklininka.Core;
 using Poliklininka.Models.Admin;
 using Poliklininka.Services;
-using Poliklininka.Services.Admin;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Windows;
 using System.Windows.Input;
 
@@ -31,7 +31,27 @@ public class AdminViewModel : BaseViewModel
     public AdminUserDto? SelectedUser
     {
         get => _selectedUser;
-        set => SetProperty(ref _selectedUser, value);
+        set
+        {
+            if (SetProperty(ref _selectedUser, value))
+            {
+                _ = LoadUserDetailsAsync();
+            }
+        }
+    }
+
+    private string _userDetailsTitle = "Подчинённые данные";
+    public string UserDetailsTitle
+    {
+        get => _userDetailsTitle;
+        set => SetProperty(ref _userDetailsTitle, value);
+    }
+
+    private DataView? _userDetailsView;
+    public DataView? UserDetailsView
+    {
+        get => _userDetailsView;
+        set => SetProperty(ref _userDetailsView, value);
     }
 
     public ICommand RefreshCommand { get; }
@@ -49,6 +69,8 @@ public class AdminViewModel : BaseViewModel
         AddUserCommand = new RelayCommand(_ => _ = AddUserAsync());
         UpdateUserCommand = new RelayCommand(_ => _ = UpdateUserAsync());
         DeleteUserCommand = new RelayCommand(_ => _ = DeleteUserAsync());
+
+        UserDetailsView = CreateInfoTable("Выберите пользователя из списка.").DefaultView;
 
         _ = LoadUsersAsync();
     }
@@ -68,6 +90,34 @@ public class AdminViewModel : BaseViewModel
                 "Ошибка загрузки пользователей",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
+        }
+    }
+
+    private async Task LoadUserDetailsAsync()
+    {
+        if (SelectedUser == null || SelectedUser.Id == 0)
+        {
+            UserDetailsTitle = "Подчинённые данные";
+            UserDetailsView = CreateInfoTable("Для нового пользователя подчинённых данных пока нет.").DefaultView;
+            return;
+        }
+
+        try
+        {
+            UserDetailsTitle = SelectedUser.Role switch
+            {
+                "Patient" => $"Записи пациента: {SelectedUser.FullName}",
+                "Doctor" => $"Приёмы врача: {SelectedUser.FullName}",
+                _ => $"Подчинённые данные: {SelectedUser.FullName}"
+            };
+
+            var table = await _adminService.GetUserDetailsAsync(SelectedUser.Id, SelectedUser.Role);
+            UserDetailsView = table.DefaultView;
+        }
+        catch (Exception ex)
+        {
+            UserDetailsTitle = "Ошибка загрузки подчинённых данных";
+            UserDetailsView = CreateInfoTable(ex.Message).DefaultView;
         }
     }
 
@@ -239,5 +289,13 @@ public class AdminViewModel : BaseViewModel
         }
 
         return true;
+    }
+
+    private static DataTable CreateInfoTable(string message)
+    {
+        var table = new DataTable();
+        table.Columns.Add("Информация");
+        table.Rows.Add(message);
+        return table;
     }
 }
